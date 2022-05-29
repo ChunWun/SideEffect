@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useReducer } from 'react';
+import React, { useState, useContext, useEffect, useReducer, useRef } from 'react';
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
@@ -50,6 +50,9 @@ const Login = (props) => {
     });
   }, [userInput.isEmailVaild, userInput.isPasswordValid]);
 
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+
   const emailChangeHandler = (event) => {
     dispatchUserInput({
       type: 'UPDATE_EMAIL',
@@ -76,13 +79,22 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    csx.onLogin(userInput.emailVal, userInput.passwordVal);
+    // csx.onLogin(userInput.emailVal, userInput.passwordVal);
+
+    if (formIsValid) {
+      csx.onLogin(userInput.value, userInput.value);
+    } else if (!userInput.isEmailVaild) {
+      emailInputRef.current.focus();
+    } else {
+      passwordInputRef.current.focus();
+    }
   };
 
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
         <Input
+          ref={emailInputRef}
           type="email"
           label="E-Mail"
           id="email"
@@ -93,11 +105,12 @@ const Login = (props) => {
         >
         </Input>
         <Input
+          ref={passwordInputRef}
           type="password"
           label="password"
           id="password"
           isVaild={userInput.isPasswordValid}
-          value={userInput.emailVal}
+          value={userInput.passwordVal}
           onChange={passwordChangeHandler}
           onBlur={validateHandler}
         >
