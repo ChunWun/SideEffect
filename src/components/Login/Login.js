@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect, useReducer } from 'react';
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
-import { useEffect, useReducer } from 'react';
+import AuthContext from '../Context/AuthContext';
 
 const reducer = (state, actions) => {
   switch (actions.type) {
@@ -14,7 +14,7 @@ const reducer = (state, actions) => {
     case "UPDATE_PASSWORD":
       return ({
         ...state,
-        emailVal: actions.payload.passwordVal,
+        passwordVal: actions.payload.passwordVal,
       });
     case "ONBLUR":
       return ({
@@ -28,6 +28,7 @@ const reducer = (state, actions) => {
 }
 
 const Login = (props) => {
+  const csx = useContext(AuthContext);
 
   const [formIsValid, setFormIsValid] = useState(false);
 
@@ -37,10 +38,6 @@ const Login = (props) => {
     passwordVal: '',
     isPasswordValid: null
   });
-
-  //TODO
-  // const { isEmailValid: emailIsValid } = userInput.isEmailVaild;
-  // const { isPasswordValid: passwordIsValid } = userInput.isPasswordValid;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -78,7 +75,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(userInput.emailVal, userInput.passwordVal);
+    csx.onLogin(userInput.emailVal, userInput.passwordVal);
   };
 
   return (
