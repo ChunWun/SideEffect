@@ -79,7 +79,6 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    // csx.onLogin(userInput.emailVal, userInput.passwordVal);
 
     if (formIsValid) {
       csx.onLogin(userInput.value, userInput.value);
